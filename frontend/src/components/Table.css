@@ -1,0 +1,19 @@
+.table {
+
+    --bs-table-bg: #F2F5ED !important;
+    --bs-table-border-color: #bcc4c4 !important;
+   
+}
+
+.linhaSelecionada{
+    
+    --bs-table-bg: #dfebcd !important;
+    --bs-table-border-color: #bcc4c4 !important;
+}
+
+
+
+tbody tr:hover {
+    --bs-table-bg: #dfebcd !important;
+    --bs-table-border-color: #bcc4c4 !important;
+}

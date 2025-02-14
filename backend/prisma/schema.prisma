@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Produtos {
+  cod Int @default(autoincrement()) @id
+  nome String
+  marca String
+  preco Decimal @db.Decimal(10,2)
+  quantidade Int @default(0)
+  fornecedor String?
+  itensVenda ItensVenda[]
+}
+
+model Clientes {
+  cod Int @default(autoincrement()) @id
+  nome String
+  cpf String @db.VarChar(11) @unique
+  email String? @unique
+  telefone String @db.VarChar(11)
+  endereco String
+  agendamentos Agendamentos[]
+  vendas Vendas[]
+}
+
+model Servicos {
+  cod Int @default(autoincrement()) @id
+  nome String @unique
+  duracao Int
+  preco Decimal @db.Decimal(10,2)
+  descricao String?
+  agendamentos Agendamentos[]
+}
+
+enum Status {
+  PENDENTE @map("Pendente")
+  CANCELADO @map("Cancelado")
+  CONCLUIDO @map("Concluido")
+}
+
+enum FormasPagamento {
+  DEBITO @map("Cartão debito")
+  CREDITO @map("Cartão crédito")
+  PIX @map("PIX")
+  DINHEIRO @map("Dinheiro")
+}
+
+model Agendamentos{
+  cod Int @default(autoincrement()) @id
+  cliente_id Int
+  servico_id Int
+  data DateTime @default(now())
+  status Status
+  formaPgto FormasPagamento
+  cliente Clientes @relation(fields: [cliente_id], references: [cod])
+  servico Servicos  @relation(fields: [servico_id], references: [cod])
+  @@unique([cliente_id, servico_id, data])
+}
+
+model Vendas {
+  cod Int @default(autoincrement()) @id
+  cliente_id Int
+  cliente Clientes @relation(fields: [cliente_id], references: [cod]) 
+  data DateTime @default(now())
+  formaPgto FormasPagamento
+  itens ItensVenda[]
+}
+
+model ItensVenda {
+  cod Int @default(autoincrement()) @id
+  venda_id Int
+  produto_id Int
+  quantidade Int
+  total Decimal
+  venda Vendas @relation(fields: [venda_id], references: [cod], onDelete: Cascade)
+  produto Produtos @relation(fields: [produto_id], references: [cod])
+  @@unique([venda_id, produto_id])
+}
