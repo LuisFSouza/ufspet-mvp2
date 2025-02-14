@@ -17,7 +17,7 @@ Para executar o projeto, siga os seguintes passos:
 
 1. **Clone o repositório**: Clone este repositório em sua máquina local utilizando o Git
 ```
-git clone https://github.com/LuisFSouza/ufspet-mvp1.git
+git clone https://github.com/LuisFSouza/ufspet-mvp2.git
 ```
 
 2. **Banco de dados**: Crie um banco de dados no postgresql.
